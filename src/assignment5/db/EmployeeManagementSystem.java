@@ -1,6 +1,7 @@
 package assignment5.db;
 
 import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,18 +31,18 @@ public class EmployeeManagementSystem {
 
             switch (option){
                 case 1:
-                    System.out.println("Enter username");
-                    String username = scanner.nextLine();
-                    System.out.println("Enter username");
-                    String password = scanner.nextLine();
+                    System.out.println("Please nter username");
+                    String username = scanner.next();
+                    System.out.println("Please enter password");
+                    String password = scanner.next();
 
                     Statement statement = connection.createStatement();
 
-                    String SQL1 = "select * from employeedetails;";
+                    String SQL1 = "select username, password from employeedetails;";
 
                     ResultSet resultSet = statement.executeQuery(SQL1);
-                    List<String> usernameList = null;
-                    List<String> passwordList = null;
+                    List<String> usernameList = new LinkedList<String>();
+                    List<String> passwordList =  new LinkedList<String>();
                     while (resultSet.next()) {
                         usernameList.add( resultSet.getString("username"));
                         passwordList.add( resultSet.getString("password"));
@@ -54,19 +55,19 @@ public class EmployeeManagementSystem {
                     }
                     resultSet.close();
                     statement.close();
-                    connection.close();
+                   // connection.close();
                     break;
 
                 case 2:
-                    System.out.println("Enter User ID");
+                    System.out.println("Please enter User ID");
                     int userID = scanner.nextInt();
-                    System.out.println("Enter Name");
-                    String Name = scanner.nextLine();
-                    System.out.println("Enter Contact Number");
+                    System.out.println("Please enter Name");
+                    String Name = scanner.next();
+                    System.out.println("Please enter Contact Number");
                     long contactNumber = scanner.nextLong();
                     int contactNumber1 = (int) contactNumber;
-                    System.out.println("Enter Address");
-                    String address = scanner.nextLine();
+                    System.out.println("Please enter Address");
+                    String address = scanner.next();
 
                     String SQL2 = "INSERT INTO employeedetails VALUES (?,?,?,?,?,?)";
 
@@ -85,9 +86,9 @@ public class EmployeeManagementSystem {
 
                     System.out.println("You have successfully completed the registration");
                     System.out.println("Please enter username");
-                    String username1 = scanner.nextLine();
+                    String username1 = scanner.next();
                     System.out.println("Please enter username");
-                    String password1 = scanner.nextLine();
+                    String password1 = scanner.next();
 
                     String updateSQL = "UPDATE employeedetails SET username = '"+username1+"', password= '"+password1+"' WHERE id = "+userID+";";
                     Statement updateStatement = connection.createStatement();
@@ -96,32 +97,32 @@ public class EmployeeManagementSystem {
                     System.out.println("Username and password updated successfully");
                 }
                     updateStatement.close();
-                    connection.close();
+                 //   connection.close();
                     break;
 
                 case 3:
                     System.out.println("What detail would you like to update?");
-                    String updateDetail = scanner.nextLine();
-                    if(!updateDetail.equalsIgnoreCase("contact number")){
-                        System.out.println("You can update only contact number");
-                    }
-                    else{
+                    String updateDetail = scanner.next();
+                    if(updateDetail.equalsIgnoreCase("contactnumber")){
                         System.out.println("Please enter User ID");
-                        int userIDUpdate = scanner.nextInt();
-                        String updateSQL1 = "UPDATE employeedetails SET contactnumber = '"+updateDetail+"'' WHERE id = "+userIDUpdate+";";
+                        String userIDUpdate = scanner.next();
+                        System.out.println("Please enter the contact number to update");
+                        String updateContactNumber = scanner.next();
+                        String updateSQL1 = "UPDATE employeedetails SET contactnumber = '"+updateContactNumber+"' WHERE id = "+userIDUpdate+";";
                         Statement updateStatement1 = connection.createStatement();
                         int updateCount1 =    updateStatement1.executeUpdate(updateSQL1);
                         if(updateCount1>0){
                             System.out.println("Contact number updated successfully");
                         }
                         updateStatement1.close();
-                        connection.close();
-                        break;
-
+                     //   connection.close();
                     }
-
+                    else{
+                        System.out.println("You can update only contact number");
+                    }
+                    break;
                 case 4:
-                    System.out.println("Enter User ID");
+                    System.out.println("Please enter User ID");
                     int userIdDelete = scanner.nextInt();
                     String SQLDelete ="DELETE FROM employeedetails WHERE id='"+userIdDelete+"';";
                     Statement deleteStatement = connection.createStatement();
@@ -133,7 +134,7 @@ public class EmployeeManagementSystem {
                         System.out.println("User deleted successfully");
                     }
                     deleteStatement.close();
-                    connection.close();
+                   // connection.close();
                     break;
 
                 case 5:
@@ -143,12 +144,11 @@ public class EmployeeManagementSystem {
 
                 default:
                     System.out.println("Invalid input");
-                    input=false;
                     break;
             }
 
         }
-
+        connection.close();
     }
 
 }
